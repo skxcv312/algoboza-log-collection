@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "User Log Tracker",
+  "version": "1.0",
+  "description": "사용자의 웹 행동 로그를 추적합니다.",
+  "permissions": ["storage", "scripting", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "core/utils.js",
+        "core/viewTracker.js",
+        "core/log.js",
+        "core/watchUrlChange.js",
+
+        "sites/musinsa/categoryPage.js",
+        "sites/musinsa/productPage.js",
+        "sites/musinsa/searchPage.js",
+        "sites/musinsa/cartPage.js",
+        
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "User Logger"
+  }
+}
