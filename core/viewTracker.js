@@ -5,8 +5,8 @@
 // 전역 상태 변수
 let visibleStart = null;
 let totalVisibleTime = 0;
-
 let lastY = 0;
+
 // 전역 로그 객체
 let ViewLog = {
   start_time: 0, // 페이지 들어간 시간
