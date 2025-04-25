@@ -1,9 +1,18 @@
+/**
+ * userEmail
+ * timestamp
+ * view
+ * url
+ *
+ * 위 네가지는 자동 생성되니 건드릴 필요 없음
+ */
+
 const product = "product";
 const category = "category";
 const search = "search";
 const click = "click";
 const cart = "cart";
-// 클릭 로그
+// 클릭 로그~
 function createClickLog() {
   return {
     type: click,

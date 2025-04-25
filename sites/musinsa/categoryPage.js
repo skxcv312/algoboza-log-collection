@@ -36,7 +36,7 @@ const MusinsaCategoryHandler = (() => {
     if (action) {
       const clickLog = createClickLog();
       clickLog.action = action;
-      searchPageLog.clickTracking.push(clickLog);
+      PageLog.clickTracking.push(clickLog);
     }
   }
 
