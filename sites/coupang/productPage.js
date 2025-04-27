@@ -2,12 +2,9 @@
  * 기본 양식이 되는 파일
  */
 
-const defaultHandler = (() => {
-
-
-    
+const coupangProductHandler = (() => {
   // 초기화
-  const PageLog = createLog();
+  const PageLog = createProductLog();
 
   function extractInfo() {
     // 페이지의 메인 정보를 담는다.

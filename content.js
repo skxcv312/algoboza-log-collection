@@ -38,5 +38,9 @@ if (hostname.includes("musinsa")) {
     MusinsaCartHandler.init();
   }
 } else if (hostname.includes("coupang")) {
+  if (pathName.includes("products")) {
+    console.log("> 상품 페이지");
+    coupangProductHandler.init();
+  }
 } else if (hostname.includes("naver")) {
 }
