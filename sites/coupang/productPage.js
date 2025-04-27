@@ -2,14 +2,40 @@ const CoupangProductHandler = (() => {
   // 초기화
   const PageLog = createProductLog();
 
+  // 카테고리 정보 추출 함수
+  function getCategory() {
+    // <script type="application/ld+json"> 태그를 찾는다
+    const jsonLdScripts = document.querySelectorAll(
+      'script[type="application/ld+json"]'
+    );
+
+    let breadcrumbArray = [];
+
+    jsonLdScripts.forEach((script) => {
+      try {
+        const data = JSON.parse(script.innerText);
+
+        if (
+          data["@type"] === "BreadcrumbList" &&
+          Array.isArray(data.itemListElement)
+        ) {
+          // itemListElement 배열을 저장
+          breadcrumbArray = data.itemListElement.map((item) => ({
+            name: item.name,
+          }));
+        }
+      } catch (e) {
+        console.error("JSON 파싱 실패:", e);
+      }
+    });
+    return breadcrumbArray; // breadcrumb가 없으면 빈 배열 반환
+  }
+
   function extractInfo() {
     // 페이지의 메인 정보를 담는다.
     const priceEl = document.querySelector("span.total-price"); // 가격
     const nameEl = document.querySelector("h1.prod-buy-header__title"); // 상품명
-    const categoryLinks = document.querySelectorAll(".breadcrumb li a"); // 카테고리 경로
-    const categoryNames = Array.from(categoryLinks).map((el) =>
-      el.innerText.trim()
-    ); // 카테고리 이름만 추출
+    const categoryNames = getCategory();
 
     if (priceEl && nameEl) {
       const priceText = priceEl.innerText.replace(/[^0-9]/g, ""); // 가격 숫자만 추출
