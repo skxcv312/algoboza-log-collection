@@ -52,6 +52,16 @@ const defaultHandler = (() => {
     //메인 진입점
     pageLoad();
     click();
+
+    // url 변경 감지
+    watchUrlChange(() => {
+      pageLoad();
+      sendToServer(PageLog); // 서버로 전송
+    });
+    // 탭 새로고침, 종료등 이벤트 발생시 실행
+    window.addEventListener("beforeunload", () => {
+      sendToServer(PageLog); // 서버로 전송
+    });
   }
 
   // 외부에 노출

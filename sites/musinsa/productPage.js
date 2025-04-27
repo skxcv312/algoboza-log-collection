@@ -1,6 +1,6 @@
 const MusinsaProductHandler = (() => {
   // 초기화
-  const PageLog = createProductLog();
+  const PageLog = createProductLog(); // 로그 생성
 
   function extractInfo() {
     // 페이지의 메인 정보를 담는다.
@@ -105,7 +105,7 @@ const MusinsaProductHandler = (() => {
       handleLikeClick(rawTarget); // 좋아요 핸들링
       handleClickActions(rawTarget); // 클릭 핸들링
 
-      // sendToServer(PageLog); // 서버로 전송
+      sendToServer(PageLog); // 서버로 전송
     });
   }
 
@@ -129,6 +129,7 @@ const MusinsaProductHandler = (() => {
       pageLoad();
       sendToServer(PageLog); // 서버로 전송
     });
+
     // 탭 새로고침, 종료등 이벤트 발생시 실행
     window.addEventListener("beforeunload", () => {
       sendToServer(PageLog); // 서버로 전송

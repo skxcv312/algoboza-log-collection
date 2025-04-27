@@ -36,7 +36,7 @@ const MusinsaCategoryHandler = (() => {
     if (action) {
       const clickLog = createClickLog();
       clickLog.action = action;
-      searchPageLog.clickTracking.push(clickLog);
+      PageLog.clickTracking.push(clickLog);
     }
   }
 
@@ -52,7 +52,7 @@ const MusinsaCategoryHandler = (() => {
       const rawTarget = e.target;
       handleClickActions(rawTarget);
 
-      //   sendToServer(PageLog);
+      sendToServer(PageLog);
     });
   }
   // 진입점
