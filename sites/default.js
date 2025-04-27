@@ -3,6 +3,9 @@
  */
 
 const defaultHandler = (() => {
+
+
+    
   // 초기화
   const PageLog = createLog();
 

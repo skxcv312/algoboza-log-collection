@@ -42,7 +42,10 @@ if (hostname.includes("musinsa")) {
   console.log("쿠팡");
 
   // 카테고리 페이지 (예: /category/002022)
-  if (pathName.includes("category")) {
+  // 실제 카테고리 url을 보면
+  // https://www.coupang.com/np/categories/486249
+  // 이런식이기 때문에 category가 아닌 categories로 적어야 분기가 된다.
+  if (pathName.includes("categories")) {
     console.log("> 카테고리 페이지");
     CoupangCategoryHandler.init();
   }
