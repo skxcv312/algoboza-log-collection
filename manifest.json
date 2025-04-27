@@ -21,6 +21,11 @@
         "sites/musinsa/productPage.js",
         "sites/musinsa/searchPage.js",
         "sites/musinsa/cartPage.js",
+
+        "sites/coupang/categoryPage.js",
+        "sites/coupang/productPage.js",
+        "sites/coupang/searchPage.js",
+        "sites/coupang/cartPage.js",
         
         "content.js"
       ],
