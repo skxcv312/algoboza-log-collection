@@ -54,7 +54,7 @@ window.sendToServer = sendToServer;
 
 // 버튼인지 확인
 function extractButtonAction(rawTarget) {
-  const btn = rawTarget.closest("button");
+  const btn = rawTarget.closest("button, label");
   if (!btn) return null;
   // 우선 순위: visible text → aria-label → title → data-button-name
   return (

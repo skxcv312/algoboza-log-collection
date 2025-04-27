@@ -36,11 +36,13 @@ const CoupangCategoryHandler = (() => {
   function extractDetails() {
     // 쿠팡에서는 카테고리 필터 정보를 해당 필터 목록 영역에서 찾을 수 있음
     const filterEl = document.querySelectorAll(
-      'div[class="filter__item"]' // 쿠팡에서 필터 항목들을 담는 영역
+      'li[class="search-option-item selected"]' // 쿠팡에서 필터 항목들을 담는 영역
     );
+    console.log(filterEl);
     if (filterEl) {
       // 필터 항목들을 가져와서 텍스트를 배열로 저장
       PageLog.details = Array.from(filterEl)
+        .filter((el) => !el.querySelector("#price0"))
         .map((el) => el.innerText.trim())
         .filter(Boolean); // 빈 값 제거
     }
