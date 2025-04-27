@@ -38,5 +38,31 @@ if (hostname.includes("musinsa")) {
     MusinsaCartHandler.init();
   }
 } else if (hostname.includes("coupang")) {
+  // 쿠팡
+  console.log("쿠팡");
+
+  // 카테고리 페이지 (예: /category/002022)
+  if (pathName.includes("category")) {
+    console.log("> 카테고리 페이지");
+    CoupangCategoryHandler.init();
+  }
+
+  // 상품 페이지 (예: /products/123456)
+  else if (pathName.includes("products")) {
+    console.log("> 상품 페이지");
+    CoupangProductHandler.init();
+  }
+
+  // 검색 결과 페이지 (예: /search/goods?keyword=청바지)
+  else if (pathName.includes("search")) {
+    console.log("> 검색 페이지");
+    CoupangSearchHandler.init();
+  }
+
+  // 장바구니 페이지 (예: /orders/cart)
+  else if (pathName.includes("cart")) {
+    console.log("> 장바구니");
+    CoupangCartHandler.init();
+  }
 } else if (hostname.includes("naver")) {
 }

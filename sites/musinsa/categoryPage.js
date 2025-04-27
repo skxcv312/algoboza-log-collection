@@ -52,7 +52,7 @@ const MusinsaCategoryHandler = (() => {
       const rawTarget = e.target;
       handleClickActions(rawTarget);
 
-      //   sendToServer(PageLog);
+      sendToServer(PageLog);
     });
   }
   // 진입점
