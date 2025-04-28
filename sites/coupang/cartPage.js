@@ -1,55 +1,56 @@
-const MusinsaCartHandler = (() => {
+const CoupangCartHandler = (() => {
   // 초기화: 장바구니 페이지 로그 객체 생성
   const PageLog = createCarthLog();
 
   // 할인 가격 추출 함수
   function getDiscountPrice(el) {
-    // 할인된 가격이 들어 있는 <span> 요소를 선택
+    // 할인된 가격이 들어 있는 <span> 요소를 선택 (쿠팡의 할인 가격 요소로 변경)
     const salePriceEl = el.querySelector(
-      'span[class="cart-goods__sale-price__price rolling-number"]'
+      'span[class="cart-item__sale-price"]' // 쿠팡의 할인 가격 요소로 바꿈
     );
     if (!salePriceEl) return 0;
 
-    // 숫자들이 rolling-number 구조로 분리되어 있어서 각 숫자를 추출
-    const digitEls = salePriceEl.querySelectorAll(".rolling-unit-wrapper");
-    const price = Array.from(digitEls)
-      .map((el) => el.getAttribute("data-from"))
-      .filter((d) => d && !d.includes(",")) // 쉼표 제외
-      .join("");
-    const discountedPrice = parseInt(price, 10);
+    // 숫자들이 분리되어 있지 않다면 바로 값을 추출
+    const priceText = salePriceEl.innerText.replace(/[^0-9]/g, "");
+    const discountedPrice = parseInt(priceText, 10);
     return isNaN(discountedPrice) ? 0 : discountedPrice;
   }
 
   // 장바구니 상품 정보 추출 함수
   function extractInfo() {
-    // 장바구니 내 각 상품 정보가 들어 있는 박스
+    // 장바구니 내 각 상품 정보가 들어 있는 박스 (쿠팡의 장바구니 상품 정보로 바꿈)
     const cartGoodsEl = document.querySelectorAll(
-      'div[class="cart-goods__info"]'
+      'div[class="cart-item__details"]' // 쿠팡의 상품 정보 요소로 바꿈
     );
 
     cartGoodsEl.forEach((el) => {
       // 상품명을 포함하는 영역
-      const goods = el.querySelector(
-        'div[class="cart-goods__name gtm-select-item"]'
-      );
+      const goods = el.querySelector('div[class="cart-item__name"]'); // 쿠팡의 상품 이름 영역으로 바꿈
 
       const productDetails = {
-        // 상품 고유 ID
-        id: goods.getAttribute("data-item-id"),
+        // 상품 고유 ID (쿠팡에서의 데이터 구조에 맞게 수정)
+        id: goods.getAttribute("data-product-id"),
         // 상품 이름
-        name: goods.getAttribute("data-item-name"),
-        // 정상가
-        price: parseInt(goods.getAttribute("data-price")),
+        name: goods.innerText.trim(),
+        // 정상가 (쿠팡에서 가격 정보를 찾는 방법에 맞게 수정)
+        price: parseInt(
+          el
+            .querySelector('span[class="cart-item__price"]')
+            .innerText.replace(/[^0-9]/g, ""),
+          10
+        ),
         // 할인된 가격 (함수로 추출)
         discountPrice: getDiscountPrice(el),
-        // 수량
-        quantity: parseInt(goods.getAttribute("data-quantity")),
-        // 카테고리 정보 (ex. 상의|티셔츠 등)
-        category: goods.getAttribute("data-item-category")?.split("|") || [],
-        // 브랜드명
-        brand: goods.getAttribute("data-item-brand"),
-        // 시즌 정보 (ex. S/S|2024 등)
-        season: goods.getAttribute("data-item-season")?.split("|") || [],
+        // 수량 (수량 정보를 담은 속성으로 바꿈)
+        quantity: parseInt(
+          el.querySelector('input[class="cart-item__quantity"]')?.value || 1
+        ),
+        // 카테고리 정보 (쿠팡의 상품 카테고리 정보로 바꿈)
+        category: goods.getAttribute("data-category")?.split("|") || [],
+        // 브랜드명 (쿠팡에서 브랜드 정보를 가져오는 방식으로 수정)
+        brand:
+          el.querySelector('span[class="cart-item__brand"]')?.innerText ||
+          "브랜드 미제공",
       };
 
       // 페이지 로그에 상품 정보를 추가
@@ -88,7 +89,7 @@ const MusinsaCartHandler = (() => {
       console.log(rawTarget); // 클릭한 요소 디버깅
       logParentHierarchy(rawTarget); // 클릭 요소의 부모 트리 디버깅
       handleClickActions(rawTarget); // 행동 추출 및 기록
-      // sendToServer(PageLog); // 서버로 로그 전송
+      sendToServer(PageLog); // 서버로 로그 전송
     });
   }
 

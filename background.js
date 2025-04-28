@@ -21,18 +21,19 @@ async function handleLogMessage(log) {
     // console.log("[URL]", BASE_URL + endpoint);
     console.log("[EXTENSION ORIGIN]", location.origin);
 
-    const response = await fetch(BASE_URL + endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: payload,
-    });
+    // 일단 서버로 로그 보내기는 주석처리
+    // const response = await fetch(BASE_URL + endpoint, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: payload,
+    // });
 
-    console.log("[STATUS]", response.status); // Code 번호
-    if (!response.ok) {
-      console.error("[handleLogMessage] 응답 실패", await response.text());
-    }
+    // console.log("[STATUS]", response.status); // Code 번호
+    // if (!response.ok) {
+    //   console.error("[handleLogMessage] 응답 실패", await response.text());
+    // }
   } catch (err) {
     console.error("[handleLogMessage] 예외 발생", err);
   }

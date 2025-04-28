@@ -52,7 +52,7 @@ const MusinsaCategoryHandler = (() => {
       const rawTarget = e.target;
       handleClickActions(rawTarget);
 
-      //   sendToServer(PageLog);
+      // sendToServer(PageLog);
     });
   }
   // 진입점
@@ -63,6 +63,7 @@ const MusinsaCategoryHandler = (() => {
     watchUrlChange((newUrl) => {
       sendToServer(PageLog);
       pageLoad(newUrl);
+      PageLog.clickTracking = []; // 클릭 로그 배열 초기화
     });
 
     window.addEventListener("beforeunload", () => {
