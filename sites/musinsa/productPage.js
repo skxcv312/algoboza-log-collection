@@ -105,7 +105,7 @@ const MusinsaProductHandler = (() => {
       handleLikeClick(rawTarget); // 좋아요 핸들링
       handleClickActions(rawTarget); // 클릭 핸들링
 
-      // sendToServer(PageLog); // 서버로 전송
+      sendToServer(PageLog); // 서버로 전송
     });
   }
 
@@ -128,7 +128,6 @@ const MusinsaProductHandler = (() => {
     watchUrlChange(() => {
       pageLoad();
       sendToServer(PageLog); // 서버로 전송
-      PageLog.clickTracking = [];
     });
 
     // 탭 새로고침, 종료등 이벤트 발생시 실행
