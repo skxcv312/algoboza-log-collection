@@ -29,7 +29,9 @@ const MusinsaCartHandler = (() => {
 
     cartGoodsEl.forEach((el) => {
       // 상품명을 포함하는 영역
-      const goods = el.querySelector('div[class="cart-goods__name gtm-select-item"]');
+      const goods = el.querySelector(
+        'div[class="cart-goods__name gtm-select-item"]'
+      );
 
       const productDetails = {
         // 상품 고유 ID
@@ -86,7 +88,7 @@ const MusinsaCartHandler = (() => {
       console.log(rawTarget); // 클릭한 요소 디버깅
       logParentHierarchy(rawTarget); // 클릭 요소의 부모 트리 디버깅
       handleClickActions(rawTarget); // 행동 추출 및 기록
-      sendToServer(PageLog); // 서버로 로그 전송
+      // sendToServer(PageLog); // 서버로 로그 전송
     });
   }
 
@@ -100,8 +102,8 @@ const MusinsaCartHandler = (() => {
 
   // 초기화 함수
   function init() {
-    click();      // 클릭 추적 시작
-    pageLoad();   // 장바구니 상품 추출
+    click(); // 클릭 추적 시작
+    pageLoad(); // 장바구니 상품 추출
 
     // 페이지를 떠날 때 마지막 로그 전송
     window.addEventListener("beforeunload", () => {
@@ -112,6 +114,7 @@ const MusinsaCartHandler = (() => {
     watchUrlChange(() => {
       pageLoad();
       sendToServer(PageLog);
+      PageLog.clickTracking = [];
     });
   }
 

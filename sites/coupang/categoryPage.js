@@ -6,8 +6,9 @@ const CoupangCategoryHandler = (() => {
   // 카테고리 정보 추출 함수
   function getCategory() {
     // <script type="application/ld+json"> 태그를 찾는다
+
     const jsonLdScripts = document.querySelectorAll(
-      'script[type="application/ld+json"]'
+      'script[type="application/ld+json"]' // => 아마 처음에는 테그가 잘못 되었던걸로 보인다.
     );
 
     let breadcrumbArray = [];
@@ -96,6 +97,7 @@ const CoupangCategoryHandler = (() => {
     watchUrlChange((newUrl) => {
       sendToServer(PageLog); // 기존 로그 전송
       pageLoad(newUrl); // 새로운 URL에 맞게 정보 추출
+      PageLog.clickTracking = [];
     });
 
     // 페이지를 떠날 때 마지막 로그 전송

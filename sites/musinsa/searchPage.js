@@ -40,7 +40,7 @@ const MusinsaSearchHandler = (() => {
     window.addEventListener("click", (e) => {
       const rawTarget = e.target;
       handleClickActions(rawTarget);
-      sendToServer(PageLog);
+      // sendToServer(PageLog);
     });
   }
 
@@ -51,6 +51,7 @@ const MusinsaSearchHandler = (() => {
     watchUrlChange((newUrl) => {
       PageLoad(newUrl);
       sendToServer(PageLog);
+      PageLog.clickTracking = [];
     });
 
     window.addEventListener("beforeunload", () => {
