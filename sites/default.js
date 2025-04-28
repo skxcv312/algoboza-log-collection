@@ -3,9 +3,6 @@
  */
 
 const defaultHandler = (() => {
-
-
-    
   // 초기화
   const PageLog = createLog();
 
@@ -57,9 +54,10 @@ const defaultHandler = (() => {
     click();
 
     // url 변경 감지
-    watchUrlChange(() => {
-      pageLoad();
+    watchUrlChange((newUrl) => {
+      pageLoad(newUrl);
       sendToServer(PageLog); // 서버로 전송
+      PageLog.clickTracking = [];
     });
     // 탭 새로고침, 종료등 이벤트 발생시 실행
     window.addEventListener("beforeunload", () => {
