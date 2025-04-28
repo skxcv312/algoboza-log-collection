@@ -147,7 +147,6 @@ const CoupangProductHandler = (() => {
     watchUrlChange(() => {
       pageLoad();
       sendToServer(PageLog); // 서버로 전송
-      PageLog.clickTracking = [];
     });
     // 탭 새로고침, 종료등 이벤트 발생시 실행
     window.addEventListener("beforeunload", () => {
