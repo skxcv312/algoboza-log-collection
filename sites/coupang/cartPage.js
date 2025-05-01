@@ -89,7 +89,7 @@ const CoupangCartHandler = (() => {
             console.log(rawTarget); // 클릭한 요소 디버깅
             logParentHierarchy(rawTarget); // 클릭 요소의 부모 트리 디버깅
             handleClickActions(rawTarget); // 행동 추출 및 기록
-            sendToServer(PageLog); // 서버로 로그 전송
+            // sendToServer(PageLog); // 서버로 로그 전송
         });
     }
 

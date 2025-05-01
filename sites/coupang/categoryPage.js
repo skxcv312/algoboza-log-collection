@@ -84,7 +84,7 @@ const CoupangCategoryHandler = (() => {
             const rawTarget = e.target;
             handleClickActions(rawTarget); // 클릭 액션 처리
 
-            sendToServer(PageLog); // 서버로 로그 전송
+            // sendToServer(PageLog); // 서버로 로그 전송
         });
     }
 

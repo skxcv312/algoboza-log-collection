@@ -1,7 +1,13 @@
 // 서버에 로그를 전송
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  const log = message.data;
+  console.log(log);
+
   if (message.type === "SEND_LOG") {
-    handleLogMessage(message.data);
+    handleLogMessage(log);
+  }
+  if (message.type === "SAVE_LOG") {
+    saveLogToLocalStorage(log);
   }
 });
 
@@ -22,19 +28,30 @@ async function handleLogMessage(log) {
     console.log("[EXTENSION ORIGIN]", location.origin);
 
     // 일단 서버로 로그 보내기는 주석처리
-    // const response = await fetch(BASE_URL + endpoint, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: payload,
-    // });
+    const response = await fetch(BASE_URL + endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: payload,
+    });
 
-    // console.log("[STATUS]", response.status); // Code 번호
-    // if (!response.ok) {
-    //   console.error("[handleLogMessage] 응답 실패", await response.text());
-    // }
+    console.log("[STATUS]", response.status); // Code 번호
+    if (!response.ok) {
+      console.error("[handleLogMessage] 응답 실패", await response.text());
+    }
   } catch (err) {
     console.error("[handleLogMessage] 예외 발생", err);
   }
+}
+
+// 로컬 스토리지에 로그 저장
+async function saveLogToLocalStorage(log) {
+  chrome.storage.local.get(["logs"], (result) => {
+    const logs = result.logs || [];
+    logs.push(log);
+    chrome.storage.local.set({ logs }, () => {
+      console.log("로그 저장 완료", logs);
+    });
+  });
 }

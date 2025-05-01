@@ -3,14 +3,6 @@
  * 전역 함수로 등록하여 모든 js 파일에서 들여다 볼 수 있다.
  */
 
-// 로컬 스토리지에 로그 저장
-function saveLogToLocalStorage(log) {
-  const logs = JSON.parse(localStorage.getItem("logs") || "[]");
-  logs.push(log);
-  localStorage.setItem("logs", JSON.stringify(logs));
-}
-window.saveLogToLocalStorage = saveLogToLocalStorage;
-
 // 클릭된 테그의 상위 테그 확인
 function logParentHierarchy(element, maxLevel = 5) {
   let parent = element.parentElement;
@@ -58,13 +50,12 @@ function sendToServer(log) {
   log.view = getViewTracking?.();
   log.userEmail = userEmail;
   console.log("[LOG]", log);
-  saveLogToLocalStorage(log);
-  
-  try {
-    chrome.runtime.sendMessage({ type: "SEND_LOG", data: log });
-  } catch (err) {
-    console.warn("Extension 메시지 전송 실패:", err.message);
-  }
+  chrome.runtime.sendMessage({ type: "SAVE_LOG", data: log });
+  // try {
+  //   chrome.runtime.sendMessage({ type: "SEND_LOG", data: log });
+  // } catch (err) {
+  //   console.warn("Extension 메시지 전송 실패:", err.message);
+  // }
 }
 
 // 버튼인지 확인

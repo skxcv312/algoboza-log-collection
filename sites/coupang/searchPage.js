@@ -56,7 +56,7 @@ const CoupangSearchHandler = (() => {
         window.addEventListener("click", (e) => {
             const rawTarget = e.target; // 클릭된 요소를 가져옴
             handleClickActions(rawTarget); // 클릭된 요소에 대한 액션 처리
-            sendToServer(PageLog); // 처리된 로그를 서버로 전송
+            // sendToServer(PageLog); // 처리된 로그를 서버로 전송
         });
     }
 
