@@ -1,11 +1,5 @@
-/**
- * 네이버 카페 페이지 로그 추적기
- * - 검색어 추적
- * - 카페 게시글 제목 및 내용 추적
- */
-
 const NaverCafeHandler = (() => {
-    const PageLog = createCafeLog();
+    let PageLog = createCafeLog();
 
     function createCafeLog() {
         return {
@@ -17,6 +11,7 @@ const NaverCafeHandler = (() => {
             cafeTitle: null,
             cafeName: null,
             postTitle: null,
+            postContent: null,
             categories: [],
             clickTracking: [],
         };
@@ -41,67 +36,28 @@ const NaverCafeHandler = (() => {
     }
 
     function extractCafeInfo() {
-        // 카페 페이지에서 정보 추출
-        if (window.location.href.includes('cafe.naver.com')) {
-            // 카페 이름
-            const cafeNameElement = document.querySelector('#cafe-info h2') ||
-                document.querySelector('.cafe-name');
-            if (cafeNameElement) {
-                PageLog.cafeName = cafeNameElement.innerText.trim();
-            }
-
-            // iframe 내부의 게시글 내용이 있는지 확인
-            const cafeMainFrame = document.getElementById('cafe_main');
-            if (cafeMainFrame) {
-                try {
-                    const frameDoc = cafeMainFrame.contentDocument || cafeMainFrame.contentWindow.document;
-
-                    // 게시글 제목
-                    const postTitleElement = frameDoc.querySelector('.article_header h3') ||
-                        frameDoc.querySelector('.tit-box strong') ||
-                        frameDoc.querySelector('.title_text');
-                    if (postTitleElement) {
-                        PageLog.postTitle = postTitleElement.innerText.trim();
-                    }
-
-                    // 게시글 내용 (간략하게 첫 부분만)
-                    const postContentElement = frameDoc.querySelector('.article_viewer') ||
-                        frameDoc.querySelector('.ContentRenderer') ||
-                        frameDoc.querySelector('#tbody');
-                    if (postContentElement) {
-                        // 내용의 첫 200자만 저장
-                        PageLog.postContent = postContentElement.innerText.trim().substring(0, 200) + '...';
-                    }
-
-                    // 카테고리 추출
-                    const categoryElements = frameDoc.querySelectorAll('.article_category') ||
-                        frameDoc.querySelectorAll('.cafe-menu-list li a');
-                    if (categoryElements.length > 0) {
-                        PageLog.categories = Array.from(categoryElements)
-                            .map(el => el.innerText.trim())
-                            .filter(Boolean);
-                    }
-                } catch (e) {
-                    console.error('iframe 접근 오류:', e);
-                }
-            } else {
-                // iframe 없는 경우 직접 DOM에서 추출 시도
-                const postTitleElement = document.querySelector('.article_header h3') ||
-                    document.querySelector('.tit-box strong');
-                if (postTitleElement) {
-                    PageLog.postTitle = postTitleElement.innerText.trim();
-                }
-
-                const postContentElement = document.querySelector('.article_viewer') ||
-                    document.querySelector('.ContentRenderer');
-                if (postContentElement) {
-                    PageLog.postContent = postContentElement.innerText.trim().substring(0, 200) + '...';
-                }
-            }
-
-            console.log('카페 정보:', PageLog);
+        const iframe = document.getElementById('cafe_main');
+        if (!iframe) return;
+    
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+    
+        const postTitleElem = iframeDoc.querySelector('.title_text');
+        const postContentElem = iframeDoc.querySelector('.se-main-container, .ContentRenderer');
+    
+        if (postTitleElem) PageLog.postTitle = postTitleElem.innerText.trim();
+    
+        if (postContentElem) {
+            let rawContent = postContentElem.innerText;
+    
+            // ✅ 불필요한 줄바꿈, 탭 제거 + 다중 공백 하나로 + 앞뒤 trim
+            const cleanedContent = rawContent
+                .replace(/\s+/g, ' ')  // 여러 공백/줄바꿈/탭 → 하나의 공백
+                .trim();
+    
+            PageLog.postContent = cleanedContent;
         }
     }
+    
 
     function handleClickActions(rawTarget) {
         // 클릭한 요소의 액션 추출
@@ -123,12 +79,27 @@ const NaverCafeHandler = (() => {
     }
 
     function pageLoad() {
-        setTimeout(() => {
-            extractSearchInfo();
-            extractCafeInfo();
-            console.log('네이버 카페 페이지 로그:', PageLog);
-        }, 2000); // DOM 렌더링 후 정보 추출을 위한 딜레이
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                extractSearchInfo();
+                extractCafeInfo();
+    
+                // 빈 값 또는 비어있는 리스트를 제외한 로그 정리
+                const filteredLog = JSON.parse(JSON.stringify(PageLog));
+                Object.keys(filteredLog).forEach(key => {
+                    if (
+                        filteredLog[key] === null ||
+                        (Array.isArray(filteredLog[key]) && filteredLog[key].length === 0)
+                    ) {
+                        delete filteredLog[key];
+                    }
+                });
+    
+                resolve(filteredLog);
+            }, 2000);
+        });
     }
+    
 
     function click() {
         document.addEventListener('click', (e) => {
@@ -142,15 +113,17 @@ const NaverCafeHandler = (() => {
         });
     }
 
+
     function init() {
-        pageLoad();
+        pageLoad().then(filteredLog => {
+            console.log('네이버 카페 페이지 로그:', filteredLog);  // 초기 로딩 때만 출력
+        });
         click();
 
         // URL 변경 감지
         watchUrlChange((newUrl) => {
-            // URL이 변경되면 새로운 페이지 로그 생성
             PageLog = createCafeLog();
-            pageLoad(newUrl);
+            pageLoad();
             sendToServer(PageLog);
         });
 
@@ -159,7 +132,6 @@ const NaverCafeHandler = (() => {
             sendToServer(PageLog);
         });
     }
-
     return {
         init,
     };

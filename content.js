@@ -77,6 +77,8 @@ if (hostname.includes("musinsa")) {
     CoupangCartHandler.init();
   }
 }
+
+// 네이버 
 else if (hostname.includes("naver")) {
   console.log("네이버");
 
@@ -85,9 +87,7 @@ else if (hostname.includes("naver")) {
     console.log("> 블로그 페이지");
     injectScript("blog.js");
     setTimeout(() => {
-      if (window.NaverBlogHandler) {
-        NaverBlogHandler.init();
-      }
+      if (window.NaverBlogHandler) NaverBlogHandler.init();
     }, 1000);
   }
 
@@ -96,9 +96,7 @@ else if (hostname.includes("naver")) {
     console.log("> 카페 페이지");
     injectScript("cafe.js");
     setTimeout(() => {
-      if (window.NaverCafeHandler) {
-        NaverCafeHandler.init();
-      }
+      if (window.NaverCafeHandler) NaverCafeHandler.init();
     }, 1000);
   }
 
@@ -107,9 +105,7 @@ else if (hostname.includes("naver")) {
     console.log("> 쇼핑 페이지");
     injectScript("shopping.js");
     setTimeout(() => {
-      if (window.NaverShoppingHandler) {
-        NaverShoppingHandler.init();
-      }
+      if (window.NaverShoppingHandler) NaverShoppingHandler.init();
     }, 1000);
   }
 
@@ -118,58 +114,18 @@ else if (hostname.includes("naver")) {
     console.log("> 지도/플레이스 페이지");
     injectScript("place.js");
     setTimeout(() => {
-      if (window.NaverPlaceHandler) {
-        NaverPlaceHandler.init();
-      }
+      if (window.NaverPlaceHandler) NaverPlaceHandler.init();
     }, 1000);
   }
 
-  // 네이버 검색
-  else if (hostname.includes("search.naver.com")) {
-    console.log("> 검색 페이지");
-
-    // 블로그 검색 결과
-    if (pathName.includes("/blog") || url.search.includes("where=post")) {
-      console.log(">> 블로그 검색 결과");
-      injectScript("blog.js");
-      setTimeout(() => {
-        if (window.NaverBlogHandler) {
-          NaverBlogHandler.init();
-        }
-      }, 1000);
-    }
-
-    // 카페 검색 결과
-    else if (pathName.includes("/cafe") || url.search.includes("where=article")) {
-      console.log(">> 카페 검색 결과");
-      injectScript("cafe.js");
-      setTimeout(() => {
-        if (window.NaverCafeHandler) {
-          NaverCafeHandler.init();
-        }
-      }, 1000);
-    }
-
-    // 쇼핑 검색 결과
-    else if (pathName.includes("/shopping") || url.search.includes("where=shop")) {
-      console.log(">> 쇼핑 검색 결과");
-      injectScript("shopping.js");
-      setTimeout(() => {
-        if (window.NaverShoppingHandler) {
-          NaverShoppingHandler.init();
-        }
-      }, 1000);
-    }
-
-    // 지도/플레이스 검색 결과
-    else if (pathName.includes("/place") || url.search.includes("where=place")) {
-      console.log(">> 지도/플레이스 검색 결과");
-      injectScript("place.js");
-      setTimeout(() => {
-        if (window.NaverPlaceHandler) {
-          NaverPlaceHandler.init();
-        }
-      }, 1000);
-    }
+  // ✅ 네이버 검색
+  else if (hostname.includes("searchLogPage")) {
+    console.log("> 네이버 검색 페이지");
+    injectScript("searchLogPage.js");
+    setTimeout(() => {
+      if (window.NaverSearchHandler) {
+        NaverSearchHandler.init();
+      }
+    }, 1000);
   }
 }

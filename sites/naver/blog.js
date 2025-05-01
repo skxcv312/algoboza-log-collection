@@ -1,10 +1,3 @@
-/**
- * 네이버 블로그 페이지 로그 추적기
- * - 검색어 추적
- * - 블로그 제목 및 내용 추적
- * - 작성자, 카테고리, 태그 추적
- */
-
 const NaverBlogHandler = (() => {
     let PageLog = createBlogLog();
 
@@ -33,16 +26,14 @@ const NaverBlogHandler = (() => {
 
     // 네이버 블로그 주인이 작성한 제목 추출 함수
     function extractBlogTitle() {
-        // 페이지의 <h3> 태그에서 제목 추출 (주로 블로그 제목이 위치한 곳)
         const titleElement = document.querySelector('head > title');
         if (titleElement) {
-            return titleElement.innerText.trim();  // 블로그 주인 작성 제목
+            return titleElement.innerText.trim();
         }
 
-        // 대체 선택자로 추가
         const altTitleElement = document.querySelector('.se-module.se-text.se-title-text');
         if (altTitleElement) {
-            return altTitleElement.innerText.trim();  // 대체 제목
+            return altTitleElement.innerText.trim();
         }
 
         return null;
@@ -54,7 +45,6 @@ const NaverBlogHandler = (() => {
             const searchInput = document.querySelector('#nx_query');
             if (searchInput) {
                 PageLog.searchText = searchInput.value;
-                console.log('검색어:', PageLog.searchText);
             }
         }
     }
@@ -62,25 +52,20 @@ const NaverBlogHandler = (() => {
     // 블로그 페이지에서 정보 추출 함수
     function extractBlogInfo() {
         if (window.location.href.includes('blog.naver.com')) {
-            // 블로그 제목 추출 (블로그 주인이 작성한 제목)
             PageLog.blogTitle = extractBlogTitle();
 
-            // 블로그 작성자
             const authorElement = document.querySelector('.nick') || document.querySelector('.blogId');
             if (authorElement) {
                 PageLog.blogAuthor = authorElement.innerText.trim();
             }
 
-            // 블로그 내용 (간략하게 첫 부분만)
             const contentElement = document.querySelector('.se-main-container') ||
                 document.querySelector('.post-view') ||
                 document.querySelector('#postViewArea');
             if (contentElement) {
-                // 내용의 첫 200자만 저장
                 PageLog.blogContent = contentElement.innerText.trim().substring(0, 200) + '...';
             }
 
-            // 카테고리 추출
             const categoryElements = document.querySelectorAll('.category-name') ||
                 document.querySelectorAll('.cate_list li a');
             if (categoryElements.length > 0) {
@@ -89,7 +74,6 @@ const NaverBlogHandler = (() => {
                     .filter(Boolean);
             }
 
-            // 태그 추출
             const tagElements = document.querySelectorAll('.item_tag') ||
                 document.querySelectorAll('.tag_list li a');
             if (tagElements.length > 0) {
@@ -97,8 +81,6 @@ const NaverBlogHandler = (() => {
                     .map(el => el.innerText.trim().replace('#', ''))
                     .filter(Boolean);
             }
-
-            console.log('블로그 정보:', PageLog);
         }
     }
 
@@ -125,8 +107,21 @@ const NaverBlogHandler = (() => {
         setTimeout(() => {
             extractSearchInfo();
             extractBlogInfo();
-            console.log('네이버 블로그 페이지 로그:', PageLog);
-        }, 2000); // DOM 렌더링 후 정보 추출을 위한 딜레이
+
+            // 빈 값 또는 비어있는 리스트를 제외한 로그 출력
+            const filteredLog = JSON.parse(JSON.stringify(PageLog)); // 깊은 복사
+
+            Object.keys(filteredLog).forEach(key => {
+                if (
+                    filteredLog[key] === null || // null 값
+                    (Array.isArray(filteredLog[key]) && filteredLog[key].length === 0) // 빈 배열
+                ) {
+                    delete filteredLog[key]; // 빈 값 또는 배열은 삭제
+                }
+            });
+
+            console.log('네이버 블로그 페이지 로그:', filteredLog); // 필터링된 로그만 출력
+        }, 2000);
     }
 
     // 클릭 이벤트 리스너

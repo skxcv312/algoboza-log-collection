@@ -24,6 +24,7 @@
         "core/viewTracker.js",
         "core/log.js",
         "core/watchUrlChange.js",
+
         "sites/musinsa/categoryPage.js",
         "sites/musinsa/productPage.js",
         "sites/musinsa/searchPage.js",
@@ -34,12 +35,12 @@
         "sites/coupang/searchPage.js",
         "sites/coupang/cartPage.js",
 
-  
         "sites/naver/blog.js",
         "sites/naver/cafe.js",
         "sites/naver/shopping.js",
         "sites/naver/place.js",
-        
+        "sites/naver/searchLogPage.js",
+
         "content.js"
       ],
       "run_at": "document_idle"
