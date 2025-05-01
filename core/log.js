@@ -28,7 +28,7 @@ function createProductLog() {
     userEmail: null,
     type: product,
     timestamp: null, // 정보 생성 시간
-    url: new URL(window.location.href), // 현재 페이지의 전체 URL
+    url: null, // 현재 페이지의 전체 URL
     like: false, // 좋아요 여부 (true: 누름, false: 안 누름 또는 취소)
     productName: null, // 상품명
     price: null, // 상품 가격 (숫자형)
@@ -47,7 +47,7 @@ function createCategoryLog() {
     category: [],
     clickTracking: [], // 사용자 클릭 이벤트 로그 (각 클릭에 대한 세부 정보 배열)
     timestamp: null, // 정보 생성 시간
-    url: new URL(window.location.href), // 현재 페이지의 전체 URL
+    url: null, // 현재 페이지의 전체 URL
     details: [], // 기타 속성 정보 (성별, 시즌 등 선택된 필드만)
     view: null, // 뷰 트래킹 정보 (체류 시간, 스크롤 등 페이지 상호작용 요약)
   };
@@ -63,7 +63,7 @@ function createSearchLog() {
     view: null,
     clickTracking: [],
     timestamp: null,
-    url: new URL(window.location.href), // 현재 페이지의 전체 URL
+    url: null, // 현재 페이지의 전체 URL
   };
 }
 window.createSearchLog = createSearchLog;
@@ -77,7 +77,7 @@ function createCarthLog() {
     view: null,
     clickTracking: [],
     timestamp: null,
-    url: new URL(window.location.href), // 현재 페이지의 전체 URL
+    url: null, // 현재 페이지의 전체 URL
   };
 }
 window.createCarthLog = createCarthLog;
