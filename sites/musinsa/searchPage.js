@@ -49,8 +49,8 @@ const MusinsaSearchHandler = (() => {
     click();
 
     watchUrlChange((newUrl) => {
-      PageLoad(newUrl);
       sendToServer(PageLog);
+      PageLoad(newUrl);
       PageLog.clickTracking = [];
     });
 

@@ -27,6 +27,7 @@ const MusinsaCategoryHandler = (() => {
       `span[data-category-id="${categoryId}"]`
     );
     if (categoryEl) {
+      PageLog.url = url;
       PageLog.category = getCategory(categoryEl);
     }
   }

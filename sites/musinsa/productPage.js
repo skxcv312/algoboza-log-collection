@@ -80,7 +80,7 @@ const MusinsaProductHandler = (() => {
     } else if (rawTarget.closest('button[data-button-name="상품정보접기"]')) {
       action = "상품정보더보기";
     } else if (rawTarget.closest('div[data-button-id="select_optionvalue"]')) {
-      action = `사이즈-${
+      action = `옵션-${
         rawTarget.closest('div[data-button-id="select_optionvalue"]')
           .textContent
       }`;
@@ -126,8 +126,8 @@ const MusinsaProductHandler = (() => {
 
     // url 변경 감지
     watchUrlChange(() => {
-      pageLoad();
       sendToServer(PageLog); // 서버로 전송
+      pageLoad();
       PageLog.clickTracking = [];
     });
 

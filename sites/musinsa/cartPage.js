@@ -112,8 +112,8 @@ const MusinsaCartHandler = (() => {
 
     // SPA에서 URL이 바뀌면 다시 정보 추출
     watchUrlChange(() => {
-      pageLoad();
       sendToServer(PageLog);
+      pageLoad();
       PageLog.clickTracking = [];
     });
   }
