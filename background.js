@@ -9,7 +9,43 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "SAVE_LOG") {
     saveLogToLocalStorage(log);
   }
+  if (message.type === "DOWNLOAD_LOGS") {
+    downloadLogsFromStorage();
+  }
 });
+
+// 다운로드
+function downloadLogsFromStorage() {
+  chrome.storage.local.get("logs", (result) => {
+    const logs = result.logs || [];
+    const jsonString = JSON.stringify(logs, null, 2);
+
+    const blob = new Blob([jsonString], { type: "application/json" });
+    const reader = new FileReader();
+
+    reader.onload = function () {
+      const base64Data = reader.result.split(",")[1];
+      const url = `data:application/json;base64,${base64Data}`;
+
+      chrome.downloads.download(
+        {
+          url: url,
+          filename: `logs_${Date.now()}.json`,
+          saveAs: true,
+        },
+        (downloadId) => {
+          if (chrome.runtime.lastError) {
+            console.error("다운로드 실패:", chrome.runtime.lastError.message);
+          } else {
+            console.log("다운로드 성공:", downloadId);
+          }
+        }
+      );
+    };
+
+    reader.readAsDataURL(blob);
+  });
+}
 
 async function handleLogMessage(log) {
   if (!log || typeof log !== "object" || !log.type) {

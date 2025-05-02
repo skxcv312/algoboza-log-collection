@@ -6,7 +6,8 @@
   "permissions": [
     "storage",
     "scripting",
-    "tabs"
+    "tabs",
+    "downloads"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -47,6 +48,7 @@
     }
   ],
   "action": {
-    "default_title": "User Logger"
+    "default_popup": "popup.html",
+    "default_title": "로그 다운로드"
   }
 }
