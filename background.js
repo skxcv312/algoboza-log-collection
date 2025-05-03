@@ -1,3 +1,5 @@
+import { APP_ENV } from "./core/env.js";
+
 // 서버에 로그를 전송
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   const log = message.data;
@@ -11,6 +13,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   if (message.type === "DOWNLOAD_LOGS") {
     downloadLogsFromStorage();
+  }
+  if (message.type === "NAVER_PLACE_SEARCH") {
+    naverPlaceSerch(message.query).then((data) => {
+      sendResponse(data);
+    });
+    return true;
   }
 });
 
@@ -90,4 +98,17 @@ async function saveLogToLocalStorage(log) {
       console.log("로그 저장 완료", logs);
     });
   });
+}
+
+async function naverPlaceSerch(placeName) {
+  return fetch(
+    `https://openapi.naver.com/v1/search/local.json?query=${placeName}`,
+    {
+      method: "GET",
+      headers: {
+        "X-Naver-Client-Id": APP_ENV.NAVER_CLIENT_ID,
+        "X-Naver-Client-Secret": APP_ENV.NAVER_CLIENT_SECRET,
+      },
+    }
+  ).then((res) => res.json());
 }
