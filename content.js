@@ -78,7 +78,7 @@ if (hostname.includes("musinsa")) {
   }
 }
 
-// 네이버 
+// 네이버
 else if (hostname.includes("naver")) {
   console.log("네이버");
 
@@ -110,12 +110,12 @@ else if (hostname.includes("naver")) {
   }
 
   // 네이버 지도/플레이스
-  else if (hostname.includes("map.naver.com") || hostname.includes("place.naver.com")) {
+  else if (
+    hostname.includes("map.naver.com") ||
+    hostname.includes("place.naver.com")
+  ) {
     console.log("> 지도/플레이스 페이지");
-    injectScript("place.js");
-    setTimeout(() => {
-      if (window.NaverPlaceHandler) NaverPlaceHandler.init();
-    }, 1000);
+    NaverPlaceHandler.init();
   }
 
   // ✅ 네이버 검색
