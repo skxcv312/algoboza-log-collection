@@ -39,6 +39,7 @@ const NaverPlaceHandler = (() => {
     if (!pathParts.includes("place")) {
       return null;
     }
+
     const pl = {
       name: null,
       category: null,
