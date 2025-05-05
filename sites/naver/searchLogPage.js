@@ -12,7 +12,7 @@
 
     // 기본 로그 정보 구성
     const logData = {
-        event: 'search',
+        type: 'search',
         searchQuery: query,
         timestamp: new Date().toISOString(),
         url: currentUrl,

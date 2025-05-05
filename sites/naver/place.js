@@ -401,53 +401,6 @@ const NaverPlaceLogger = (() => {
         }
     }
     
-    // 다운로드 버튼 추가
-    function addDownloadButton() {
-        // 기존 버튼 제거 (중복 방지)
-        const existingBtn = document.getElementById('naver-logger-download-btn');
-        if (existingBtn) {
-            existingBtn.remove();
-        }
-        
-        const btn = document.createElement('button');
-        btn.id = 'naver-logger-download-btn';
-        btn.textContent = '📥 로그 다운로드 (' + getLogCount() + '개)';
-        btn.style.position = 'fixed';
-        btn.style.bottom = '20px';
-        btn.style.right = '20px';
-        btn.style.zIndex = '9999';
-        btn.style.padding = '10px 15px';
-        btn.style.backgroundColor = '#03C75A'; // 네이버 초록색
-        btn.style.color = 'white';
-        btn.style.border = 'none';
-        btn.style.borderRadius = '5px';
-        btn.style.cursor = 'pointer';
-        btn.style.fontWeight = 'bold';
-        btn.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
-        btn.onclick = downloadLogs;
-        
-        document.body.appendChild(btn);
-        console.log('다운로드 버튼이 추가되었습니다. (우측 하단)');
-        
-        // 5초마다 로그 개수 업데이트
-        setInterval(() => {
-            const btnUpdate = document.getElementById('naver-logger-download-btn');
-            if (btnUpdate) {
-                btnUpdate.textContent = '📥 로그 다운로드 (' + getLogCount() + '개)';
-            }
-        }, 5000);
-    }
-    
-    // 로그 개수 가져오기
-    function getLogCount() {
-        try {
-            const storedLogs = JSON.parse(localStorage.getItem('logs') || '[]');
-            return storedLogs.length;
-        } catch {
-            return 0;
-        }
-    }
-
     // 로그 정보 출력 함수
     function printAllLogs() {
         try {
