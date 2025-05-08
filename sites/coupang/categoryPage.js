@@ -23,7 +23,7 @@ const CoupangCategoryHandler = (() => {
         ) {
           // itemListElement 배열을 저장
           breadcrumbArray = data.itemListElement
-            .slice(1)
+            .slice(2) // 카테고리중 2번째까지 삭제
             .map((item) => item.name);
         }
       } catch (e) {
