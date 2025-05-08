@@ -28,7 +28,7 @@ function getLocalTime() {
   const mm = String(kstDate.getMinutes()).padStart(2, "0");
   const ss = String(kstDate.getSeconds()).padStart(2, "0");
 
-  return `${yyyy}-${MM}-${dd} ${HH}:${mm}:${ss}`;
+  return kstDate;
 }
 window.getLocalTime = getLocalTime;
 
