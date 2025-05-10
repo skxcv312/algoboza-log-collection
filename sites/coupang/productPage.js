@@ -85,6 +85,8 @@ const CoupangProductHandler = (() => {
       action = `옵션-${rawTarget
         .closest("div.prod-option__item")
         .innerText.trim()}`;
+    } else if (rawTarget.closest("div.product-detail-seemore-btn")) {
+      action = "상품정보더보기";
     } else {
       action = extractButtonAction(rawTarget);
     }
