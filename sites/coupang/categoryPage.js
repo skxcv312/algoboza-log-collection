@@ -1,36 +1,38 @@
 const CoupangCategoryHandler = (() => {
     // 페이지 로그 객체 생성 (카테고리 페이지 관련)
+    const PageLog = createCategoryLog();
+    var categoryId;
+
+    // 카테고리 정보 추출 함수
     function getCategory() {
+        // <script type="application/ld+json"> 태그를 찾는다
         const jsonLdScripts = document.querySelectorAll(
-            'script[type="application/ld+json"]'
+            'script[type="application/ld+json"]' // => 아마 처음에는 테그가 잘못 되었던걸로 보인다.
         );
-    
-        for (const script of jsonLdScripts) {
+
+        let breadcrumbArray = [];
+
+        jsonLdScripts.forEach((script) => {
             try {
                 const data = JSON.parse(script.innerText);
-    
+
                 if (
                     data["@type"] === "BreadcrumbList" &&
                     Array.isArray(data.itemListElement)
                 ) {
-                    const breadcrumbArray = data.itemListElement
-                        .map((item) => ({ name: item.name }))
-                        .slice(-3); // 맨 뒤 3개만 추출
-    
-                    console.log("✅ 추출된 breadcrumbArray:", breadcrumbArray);
-                    return breadcrumbArray;
+                    // itemListElement 배열을 저장
+                    breadcrumbArray = data.itemListElement
+                        .slice(2) // 카테고리중 2번째까지 삭제
+                        .map((item) => item.name);
                 }
             } catch (e) {
                 console.error("JSON 파싱 실패:", e);
             }
-        }
-    
-        return []; // 유효한 BreadcrumbList가 없으면 빈 배열 반환
+        });
+
+        // 마지막 3개 카테고리만 반환 (3개 이하일 경우 모두 반환)
+        return breadcrumbArray.length > 3 ? breadcrumbArray.slice(-3) : breadcrumbArray;
     }
-    
-    
-
-
 
     // 카테고리 상세 필터 정보 추출 함수
     function extractDetails() {
