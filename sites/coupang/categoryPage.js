@@ -1,30 +1,53 @@
 const CoupangCategoryHandler = (() => {
-  // 페이지 로그 객체 생성 (카테고리 페이지 관련)
-  const PageLog = createCategoryLog();
-  var categoryId;
 
-  // 카테고리 정보 추출 함수
-  function getCategory() {
-    // <script type="application/ld+json"> 태그를 찾는다
+    // 페이지 로그 객체 생성 (카테고리 페이지 관련)
+    const PageLog = createCategoryLog();
+    var categoryId;
 
-    const jsonLdScripts = document.querySelectorAll(
-      'script[type="application/ld+json"]' // => 아마 처음에는 테그가 잘못 되었던걸로 보인다.
-    );
+    // 카테고리 정보 추출 함수
+    function getCategory() {
+        // <script type="application/ld+json"> 태그를 찾는다
+        const jsonLdScripts = document.querySelectorAll(
+            'script[type="application/ld+json"]' // => 아마 처음에는 테그가 잘못 되었던걸로 보인다.
+        );
 
-    let breadcrumbArray = [];
+        let breadcrumbArray = [];
 
-    jsonLdScripts.forEach((script) => {
-      try {
-        const data = JSON.parse(script.innerText);
+        jsonLdScripts.forEach((script) => {
+            try {
+                const data = JSON.parse(script.innerText);
 
-        if (
-          data["@type"] === "BreadcrumbList" &&
-          Array.isArray(data.itemListElement)
-        ) {
-          // itemListElement 배열을 저장
-          breadcrumbArray = data.itemListElement
-            .slice(2) // 카테고리중 2번째까지 삭제
-            .map((item) => item.name);
+                if (
+                    data["@type"] === "BreadcrumbList" &&
+                    Array.isArray(data.itemListElement)
+                ) {
+                    // itemListElement 배열을 저장
+                    breadcrumbArray = data.itemListElement
+                        .slice(2) // 카테고리중 2번째까지 삭제
+                        .map((item) => item.name);
+                }
+            } catch (e) {
+                console.error("JSON 파싱 실패:", e);
+            }
+        });
+
+        // 마지막 3개 카테고리만 반환 (3개 이하일 경우 모두 반환)
+        return breadcrumbArray.length > 3 ? breadcrumbArray.slice(-3) : breadcrumbArray;
+    }
+
+    // 카테고리 상세 필터 정보 추출 함수
+    function extractDetails() {
+        // 쿠팡에서는 카테고리 필터 정보를 해당 필터 목록 영역에서 찾을 수 있음
+        const filterEl = document.querySelectorAll(
+            'li[class="search-option-item selected"]' // 쿠팡에서 필터 항목들을 담는 영역
+        );
+        console.log(filterEl);
+        if (filterEl) {
+            // 필터 항목들을 가져와서 텍스트를 배열로 저장
+            PageLog.details = Array.from(filterEl)
+                .filter((el) => !el.querySelector("#price0"))
+                .map((el) => el.innerText.trim())
+                .filter(Boolean); // 빈 값 제거
         }
       } catch (e) {
         console.error("JSON 파싱 실패:", e);
