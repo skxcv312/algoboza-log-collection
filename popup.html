@@ -1,11 +1,84 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8" />
-  <title>Log Download</title>
+  <title>로그 다운로드</title>
+  <style>
+    /* 공통 스타일 */
+    body {
+      font-family: 'Noto Sans KR', Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f4;
+      color: #333;
+      width: 400px;
+      /* 가로로 길게 */
+    }
+
+    h3 {
+      margin: 10px 0;
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    /* 입력 필드 스타일 */
+    input[type="text"] {
+      width: 90%;
+      /* 가로로 길게 */
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 버튼 스타일 */
+    button {
+      width: 92%;
+      /* 가로로 길게 */
+      padding: 12px;
+      margin: 10px 0;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* 상태 메시지 스타일 */
+    p {
+      margin: 8px 0;
+      font-size: 16px;
+      color: #555;
+    }
+
+    /* 다운로드 버튼 스타일 */
+    #downloadBtn {
+      background-color: #28a745;
+    }
+
+    #downloadBtn:hover {
+      background-color: #218838;
+    }
+  </style>
 </head>
+
 <body>
   <button id="downloadBtn">로그 다운로드</button>
+
+  <h3>이메일 설정</h3>
+  <input type="text" id="emailInput" placeholder="이메일을 입력하세요" />
+  <button id="saveEmailBtn">이메일 저장</button>
+  <p id="statusMessage"></p>
+
   <script src="popup.js"></script>
 </body>
+
 </html>

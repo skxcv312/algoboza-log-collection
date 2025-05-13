@@ -44,19 +44,43 @@ window.getLocalTime = getLocalTime;
 //   chrome.runtime.sendMessage({ type: "SEND_LOG", data: log });
 // }
 // window.sendToServer = sendToServer;
-function sendToServer(log) {
-  const userEmail = "a@a.com";
-  log.timestamp = getLocalTime?.();
-  log.view = getViewTracking?.();
-  log.userEmail = userEmail;
-  console.log("[LOG]", log);
-  chrome.runtime.sendMessage({ type: "SAVE_LOG", data: log });
-  // try {
-  //   chrome.runtime.sendMessage({ type: "SEND_LOG", data: log });
-  // } catch (err) {
-  //   console.warn("Extension 메시지 전송 실패:", err.message);
-  // }
+// 유저 이메일 설정 함수
+function setUserEmail(email) {
+  if (email) {
+    chrome.storage.local.set({ userEmail: email }, () => {
+      console.log("User email 저장 완료:", email);
+    });
+  }
 }
+
+// 유저 이메일 가져오기 함수
+function getUserEmail(callback) {
+  chrome.storage.local.get("userEmail", (result) => {
+    if (result.userEmail) {
+      callback(result.userEmail);
+    } else {
+      console.warn("User email이 설정되지 않았습니다.");
+      callback("unknown@user.com");
+    }
+  });
+}
+
+// 서버로 로그 전송 함수
+function sendToServer(log) {
+  getUserEmail((userEmail) => {
+    log.timestamp = new Date().toISOString();
+    log.userEmail = userEmail;
+    log.view = getViewTracking();
+    console.log("[LOG]", log);
+    try {
+      chrome.runtime.sendMessage({ type: "SAVE_LOG", data: log });
+      chrome.runtime.sendMessage({ type: "SEND_LOG", data: log });
+    } catch (err) {
+      console.warn("Extension 메시지 전송 실패:", err.message);
+    }
+  });
+}
+window.sendToServer = sendToServer;
 
 // 버튼인지 확인
 function extractButtonAction(rawTarget) {

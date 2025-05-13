@@ -23,6 +23,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 // 다운로드
+// 다운로드 후 로그 삭제
 function downloadLogsFromStorage() {
   chrome.storage.local.get("logs", (result) => {
     const logs = result.logs || [];
@@ -46,6 +47,17 @@ function downloadLogsFromStorage() {
             console.error("다운로드 실패:", chrome.runtime.lastError.message);
           } else {
             console.log("다운로드 성공:", downloadId);
+            // 다운로드 성공 후 로그 삭제
+            chrome.storage.local.remove("logs", () => {
+              if (chrome.runtime.lastError) {
+                console.error(
+                  "로그 삭제 실패:",
+                  chrome.runtime.lastError.message
+                );
+              } else {
+                console.log("로그 삭제 완료");
+              }
+            });
           }
         }
       );
@@ -62,8 +74,9 @@ async function handleLogMessage(log) {
   }
 
   try {
-    const BASE_URL = "http://localhost:8080";
-    const endpoint = `/api/collection/log/${log.type}`;
+    // const BASE_URL = "http://localhost:8080";
+    const BASE_URL = "http://13.124.205.29:8080";
+    const endpoint = `/api/log/collection/${log.type}`;
     const payload = JSON.stringify(log);
 
     console.log("[LOG-TYPE]", log.type);
